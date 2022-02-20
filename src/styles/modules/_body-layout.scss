@@ -1,0 +1,40 @@
+body {
+  background: url("../assets/bg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-width: 100vw;
+  min-height: 100vh;
+  font-family: $primary-font;
+  font-size: 1.6rem;
+  color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  main {
+    width: 60vw;
+    height: 80vh;
+    background: #00101c;
+    opacity: 0.95;
+    border-radius: 2rem;
+    box-shadow: 2px 3px 5px #cccccc20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      background-color: #0a7753;
+      padding: 0.5rem 2rem;
+      border-radius: 1rem;
+      box-shadow: -2px 3px 2px #999;
+      cursor: pointer;
+      transition: transform 0.2s linear, border-radius 0.2s linear;
+
+      &:hover {
+        transform: scale(1.05);
+        border-radius: 1.5rem 1rem;
+      }
+    }
+  }
+}
