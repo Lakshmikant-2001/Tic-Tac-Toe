@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack --config webpack.dev.js",
+    "serve": "webpack-dev-server --config webpack.dev.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,16 @@
   },
   "homepage": "https://github.com/Lakshmikant-2001/Tic-Tac-Toe#readme",
   "devDependencies": {
+    "css-loader": "^6.6.0",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.5.3",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
     "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4",
+    "webpack-merge": "^5.8.0"
   }
 }

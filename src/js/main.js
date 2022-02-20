@@ -1,0 +1,1 @@
+console.log("%cTIC TAC TOE", "font-size:1.5rem;color:#fad;font-weight:bold");
