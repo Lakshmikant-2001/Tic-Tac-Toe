@@ -13,7 +13,7 @@
   transition: transform 0.2s linear, border-radius 0.2s linear;
   user-select: none;
 
-  &:hover {
+  &:hover, &:focus {
     transform: scale(1.05);
     border-radius: 1.5rem 1rem;
   }

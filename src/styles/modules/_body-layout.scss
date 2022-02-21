@@ -55,6 +55,7 @@ main {
     margin: 0 2rem;
     border-radius: 2rem;
     background-color: #cccccc20;
+    border: 4px solid transparent;
     text-align: center;
     font-size: 2rem;
     word-spacing: 100vw;
@@ -63,10 +64,13 @@ main {
     overflow: hidden;
     cursor: pointer;
 
-    span {
-      &::first-letter {
-        font-size: 2.8rem;
-      }
+    &:hover,
+    &:focus {
+      box-shadow: 3px 5px 0px #cccccc60;
+    }
+
+    span::first-letter {
+      font-size: 2.8rem;
     }
 
     &::before,
@@ -75,17 +79,49 @@ main {
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 40px;
-      height: 40px;
+      width: 100%;
+      height: 100%;
       border-radius: 0 35%;
       background-color: #cccccc30;
     }
 
-    &::after {
-      bottom: unset;
-      left: unset;
-      top: 0;
-      right: 0;
+    &::before {
+      transform: translate(-80%, 70%);
     }
+
+    &::after {
+      transform: translate(80%, -70%);
+    }
+  }
+}
+
+.add-border {
+  border-color: #0a7753 !important;
+}
+
+.add-animation {
+  &::before {
+    animation: slide-in-before 0.75s 1 linear;
+  }
+  &::after {
+    animation: slide-in-after 0.75s 1 linear;
+  }
+}
+
+@keyframes slide-in-before {
+  50% {
+    transform: translate(-65%, 55%);
+  }
+  100% {
+    transform: translate(-80%, 70%);
+  }
+}
+
+@keyframes slide-in-after {
+  50% {
+    transform: translate(65%, -55%);
+  }
+  100% {
+    transform: translate(80%, -70%);
   }
 }
