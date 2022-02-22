@@ -7,9 +7,7 @@ body {
   font-family: $primary-font;
   font-size: 1.6rem;
   color: #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex();
   overflow: hidden;
 }
 
@@ -20,109 +18,22 @@ main {
   opacity: 0.95;
   border-radius: 2rem;
   box-shadow: 2px 3px 5px #cccccc20;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  @include flex(column, space-between);
   position: relative;
 
   #game-title,
-  #start-btn {
-    margin: 3.2rem 0;
+  #btn-wrapper {
+    margin: 4rem 0;
   }
 
-  .section {
-    width: 100%;
+  #game-type-wrapper {
     padding: 0 8rem;
-    display: flex;
-    align-items: center;
-    justify-content:center;
   }
 
-  #start-btn {
-    padding: 0.5rem 2rem;
-  }
-}
-
-.section {
-  .game-type {
-    width: 50%;
+  #game-type-wrapper,
+  #game-display-wrapper {
+    width: 100%;
+    @include flex();
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 0;
-    margin: 0 2rem;
-    border-radius: 2rem;
-    background-color: #cccccc20;
-    border: 4px solid transparent;
-    text-align: center;
-    font-size: 2rem;
-    word-spacing: 100vw;
-    line-height: 4rem;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-
-    &:hover,
-    &:focus {
-      box-shadow: 3px 5px 0px #cccccc60;
-    }
-
-    span::first-letter {
-      font-size: 2.8rem;
-    }
-
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 0 35%;
-      background-color: #cccccc30;
-    }
-
-    &::before {
-      transform: translate(-80%, 70%);
-    }
-
-    &::after {
-      transform: translate(80%, -70%);
-    }
-  }
-}
-
-.add-border {
-  border-color: #0a7753 !important;
-}
-
-.add-animation {
-  &::before {
-    animation: slide-in-before 0.75s 1 linear;
-  }
-  &::after {
-    animation: slide-in-after 0.75s 1 linear;
-  }
-}
-
-@keyframes slide-in-before {
-  50% {
-    transform: translate(-65%, 55%);
-  }
-  100% {
-    transform: translate(-80%, 70%);
-  }
-}
-
-@keyframes slide-in-after {
-  50% {
-    transform: translate(65%, -55%);
-  }
-  100% {
-    transform: translate(80%, -70%);
   }
 }

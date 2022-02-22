@@ -9,14 +9,16 @@
   <body>
     <main>
       <h3 class="heading" id="game-title">tic tac toe</h3>
-      <section class="section">
+      <section id="game-type-wrapper">
         <div class="game-type heading" id="computer" tabindex="1">
           <span>VS</span> COMPUTER
         </div>
         <div class="game-type heading" id="player" tabindex="1">
           <span>VS</span> PLAYER-2
         </div>
-        <div id="game-board" class="none">
+      </section>
+      <section id="game-display-wrapper" class="none">
+        <div id="game-board">
           <div class="heading grid-item grid-item1">X</div>
           <div class="heading grid-item grid-item2">X</div>
           <div class="heading grid-item grid-item3">X</div>
@@ -28,7 +30,11 @@
           <div class="heading grid-item grid-item9">O</div>
         </div>
       </section>
-      <button class="btn" id="start-btn">start</button>
+      <section id="btn-wrapper">
+        <button class="btn" id="start-btn">start</button>
+        <button class="btn none" id="restart-btn">restart</button>
+        <button class="btn none" id="return-btn">return</button>
+      </section>
     </main>
   </body>
 </html>
