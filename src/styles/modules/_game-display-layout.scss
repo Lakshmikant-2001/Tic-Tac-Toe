@@ -15,3 +15,18 @@
     cursor: pointer;
   }
 }
+
+#game-display-wrapper{
+  .player-info{
+    @include flex(column);
+    width: 15%;
+    position: relative;
+    padding: 1rem 0;
+    border-radius: .5rem;
+    color:#aaa;
+    border-left:3px solid #cccccc50;
+    border-right:3px solid#cccccc50;
+    box-shadow: 0px 3px 10px #cccccc10, 0px -2px 10px #cccccc10;
+    text-transform: uppercase;  
+  }
+}

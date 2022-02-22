@@ -26,14 +26,18 @@ main {
     margin: 4rem 0;
   }
 
-  #game-type-wrapper {
-    padding: 0 8rem;
-  }
-
   #game-type-wrapper,
   #game-display-wrapper {
     width: 100%;
-    @include flex();
     flex-grow: 1;
+  }
+
+  #game-type-wrapper {
+    @include flex();
+    padding: 0 8rem;
+  }
+
+  #game-display-wrapper {
+    @include flex($justify:space-evenly);
   }
 }
