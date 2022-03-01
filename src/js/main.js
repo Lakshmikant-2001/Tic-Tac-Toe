@@ -1,8 +1,11 @@
+import { playerFactory, gameFactory } from "./modules/_game-logic";
+import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI } from "./modules/_game-ui-update";
+
 const gameTypeDivs = document.querySelectorAll(".game-type");
 const gameTypeWrapper = document.querySelector("#game-type-wrapper");
 const gameDisplayWrapper = document.querySelector("#game-display-wrapper");
-const player1Name = document.querySelector("#player1-name");
-const player2Name = document.querySelector("#player2-name");
+const player1InfoTag = document.querySelector("#player1-name");
+const player2InfoTag = document.querySelector("#player2-name");
 const startGameBtn = document.querySelector("#start-btn");
 const restartBtn = document.querySelector("#restart-btn");
 const returnBtn = document.querySelector("#return-btn");
@@ -52,9 +55,28 @@ startGameBtn.addEventListener("click", () => {
   loadGame();
   const players = specifyPlayers(gameType);
   const gameInstance = gameFactory(players[0], players[1]);
-  gameInstance.play();
+  
+  boardItems.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      let item = e.currentTarget;
+      let targetIndex = item.dataset.index;
+      if (gameInstance.canMark(targetIndex)) {
+        let currentPlayer = gameInstance.getCurrentPlayer();
+        updateBoardUI(item, currentPlayer)
+        gameInstance.play(targetIndex);
+        //after play currentPlayer --> next player
+        addTurnIndicatorUI(gameInstance.getCurrentPlayer());
+      }
+      //check for gameEnd 
+      if (gameInstance.isEnd()) {
+        displayResult(gameInstance.getWinner())
+      }
+    })
+  });
+
   restartBtn.addEventListener("click", () => {
     gameInstance.restart();
+    clearBoardUI()
   });
 });
 
@@ -73,17 +95,17 @@ function loadGame() {
 
 function specifyPlayers(type) {
   if (type == "computer") {
-    const player1 = playerFactory("human", true, "X");
-    const player2 = playerFactory("computer", false, "O");
-    player1Name.textContent += player1.name;
-    player2Name.textContent += player2.name;
+    const player1 = playerFactory(1, "human", true, "X");
+    const player2 = playerFactory(2, "computer", false, "O");
+    player1InfoTag.textContent += player1.name;
+    player2InfoTag.textContent += player2.name;
     return [player1, player2];
   }
   if (type == "two-player") {
-    const player1 = playerFactory("human-1", true, "X");
-    const player2 = playerFactory("human-2", false, "O");
-    player1Name.textContent += player1.name;
-    player2Name.textContent += player2.name;
+    const player1 = playerFactory(1, "human-1", true, "X");
+    const player2 = playerFactory(2, "human-2", false, "O");
+    player1InfoTag.textContent += player1.name;
+    player2InfoTag.textContent += player2.name;
     return [player1, player2];
   }
 }
@@ -92,135 +114,5 @@ function specifyPlayers(type) {
 returnBtn.addEventListener("click", () => {
   window.location.reload();
 });
-
-const playerFactory = function (name, turn, mark) {
-  return { name, turn, mark };
-};
-
-const gameFactory = function (player1, player2) {
-  let gameBoard = [], winner;
-
-  const initGameBoard = function () {
-    for (let i = 0; i < 9; i++) {
-      gameBoard[i] = "";
-    }
-  }
-
-  const checkEmptyCells = function () {
-    let emptyCells = [];
-    for (let i = 0; i < 9; i++) {
-      if (gameBoard[i] == "") {
-        emptyCells.push(i);
-      }
-    }
-    return emptyCells;
-  };
-
-  const toggleTurn = function (player) {
-    if (player == player1) {
-      player1.turn = false;
-      player2.turn = true;
-      player1Name.classList.remove("turn-indicator");
-      player2Name.classList.add("turn-indicator");
-    }
-    if (player == player2) {
-      player2.turn = false;
-      player1.turn = true;
-      player2Name.classList.remove("turn-indicator");
-      player1Name.classList.add("turn-indicator");
-    }
-  };
-
-  const checkResult = function () {
-    if (winner != undefined || checkEmptyCells().length == 0 || winner != null)
-      displayResult();
-  };
-
-  const displayResult = function () {
-    if (checkEmptyCells().length == 0) {
-      message.classList.remove("hide");
-      message.textContent = "it's a draw";
-    }
-    if (winner != undefined && winner != null) {
-      message.classList.remove("hide");
-      message.textContent = winner + " won";
-    }
-  };
-
-  initGameBoard()
-
-  const play = function () {
-    boardItems.forEach((item) => {
-      item.addEventListener("click", (e) => {
-        const targetIndex = e.currentTarget.dataset.index;
-        if (winner != undefined) {
-          return;
-        }
-        if (player1.turn == true && checkEmptyCells().includes(+targetIndex)) {
-          item.textContent = player1.mark;
-          gameBoard[targetIndex] = player1.mark;
-          winnerCheck(player1);
-          toggleTurn(player1);
-          checkResult();
-        }
-
-        if (player2.turn == true && checkEmptyCells().includes(+targetIndex)) {
-          item.textContent = player2.mark;
-          gameBoard[targetIndex] = player2.mark;
-          winnerCheck(player2);
-          toggleTurn(player2);
-          checkResult();
-        }
-      });
-    });
-  };
-
-  const restart = function () {
-    winner = null;
-    message.classList.add("hide");
-    boardItems.forEach((item) => {
-      item.textContent = "";
-    });
-    initGameBoard()
-    toggleTurn(player2);
-  };
-
-  const winnerCheck = function (p) {
-    if (
-      //row
-      (gameBoard[0] == p.mark &&
-        gameBoard[1] == p.mark &&
-        gameBoard[2] == p.mark) ||
-      (gameBoard[3] == p.mark &&
-        gameBoard[4] == p.mark &&
-        gameBoard[5] == p.mark) ||
-      (gameBoard[6] == p.mark &&
-        gameBoard[7] == p.mark &&
-        gameBoard[8] == p.mark) ||
-      //column
-      (gameBoard[0] == p.mark &&
-        gameBoard[3] == p.mark &&
-        gameBoard[6] == p.mark) ||
-      (gameBoard[1] == p.mark &&
-        gameBoard[4] == p.mark &&
-        gameBoard[7] == p.mark) ||
-      (gameBoard[2] == p.mark &&
-        gameBoard[5] == p.mark &&
-        gameBoard[9] == p.mark) ||
-      //diagnol
-      (gameBoard[0] == p.mark &&
-        gameBoard[4] == p.mark &&
-        gameBoard[8] == p.mark) ||
-      (gameBoard[2] == p.mark &&
-        gameBoard[4] == p.mark &&
-        gameBoard[6] == p.mark)
-    ) {
-      winner = p.name;
-      return;
-    }
-  };
-
-  return { play, restart };
-};
 
 console.log("%cTIC TAC TOE", "font-size:1.5rem;color:#fad;font-weight:bold");
