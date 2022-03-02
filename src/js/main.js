@@ -1,5 +1,6 @@
 import { playerFactory, gameFactory } from "./modules/_game-logic";
-import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, addAnimation, updateClassList, clearAvailableItem } from "./modules/_game-ui-update";
+import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, clearAvailableItem, displayWinIndex } from "./modules/_game-ui-update";
+import { addAnimation, updateClassList } from "./modules/_utils";
 
 const gameTypeDivs = document.querySelectorAll(".game-type");
 const gameTypeWrapper = document.querySelector("#game-type-wrapper");
@@ -70,13 +71,14 @@ function startGame() {
       let targetIndex = item.dataset.index;
       if (gameInstance.canMark(targetIndex)) {
         let currentPlayer = gameInstance.getCurrentPlayer();
-        updateBoardUI(item, currentPlayer)
-        gameInstance.play(targetIndex);                         
+        gameInstance.play(targetIndex);
+        updateBoardUI(item, currentPlayer);
         addTurnIndicatorUI(gameInstance.getCurrentPlayer()); //after play currentPlayer --> next player
       }
       if (gameInstance.isEnd()) {  //check for gameEnd 
         clearAvailableItem()
-        displayResult(gameInstance.getWinner())
+        displayResult(gameInstance.getWinner());
+        displayWinIndex(gameInstance.getWinIndex());
       }
     })
   });

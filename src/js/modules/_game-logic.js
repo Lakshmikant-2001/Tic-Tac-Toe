@@ -3,7 +3,7 @@ export const playerFactory = function (no, name, turn, mark) {
 };
 
 export const gameFactory = function (player1, player2) {
-    let gameBoard = [], winner, currentPlayer = player1;
+    let gameBoard = [], winner, currentPlayer = player1, winIndex = ["", "", ""];
 
     const initGameBoard = function () {
         for (let i = 0; i < 9; i++) {
@@ -71,43 +71,32 @@ export const gameFactory = function (player1, player2) {
 
     const restart = function () {
         winner = null;
+        winIndex = ["", "", ""]
         currentPlayer = player1;
         initGameBoard();
     };
 
+    const setWinIndex = function (i1, i2, i3) {
+        winIndex = [i1, i2, i3];
+    }
+
+    const getWinIndex = function () {
+        return winIndex;
+    }
+
     const isWinner = function (player) {
-        if (
-            //row
-            (gameBoard[0] == player.mark &&
-                gameBoard[1] == player.mark &&
-                gameBoard[2] == player.mark) ||
-            (gameBoard[3] == player.mark &&
-                gameBoard[4] == player.mark &&
-                gameBoard[5] == player.mark) ||
-            (gameBoard[6] == player.mark &&
-                gameBoard[7] == player.mark &&
-                gameBoard[8] == player.mark) ||
-            //column
-            (gameBoard[0] == player.mark &&
-                gameBoard[3] == player.mark &&
-                gameBoard[6] == player.mark) ||
-            (gameBoard[1] == player.mark &&
-                gameBoard[4] == player.mark &&
-                gameBoard[7] == player.mark) ||
-            (gameBoard[2] == player.mark &&
-                gameBoard[5] == player.mark &&
-                gameBoard[8] == player.mark) ||
-            //diagnol
-            (gameBoard[0] == player.mark &&
-                gameBoard[4] == player.mark &&
-                gameBoard[8] == player.mark) ||
-            (gameBoard[2] == player.mark &&
-                gameBoard[4] == player.mark &&
-                gameBoard[6] == player.mark)
-        ) {
-            setWinner(player);
-        }
+        let probableIndex = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], //row
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], //column
+            [0, 4, 8], [2, 4, 6]             //diagnol
+        ];
+        probableIndex.forEach(index => {
+            if ((gameBoard[index[0]] == player.mark && gameBoard[index[1]] == player.mark && gameBoard[index[2]] == player.mark)) {
+                setWinner(player);
+                setWinIndex(index[0], index[1], index[2]);
+            }
+        })
     };
 
-    return { play, restart, isEnd, getWinner, canMark, getCurrentPlayer };
+    return { play, restart, isEnd, getWinner, canMark, getCurrentPlayer, getWinIndex };
 };

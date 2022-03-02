@@ -31,6 +31,7 @@ export const clearBoardUI = function () {
     boardItems.forEach(item => {
         item.textContent = "";
         item.classList.add("available-board-item");
+        item.classList.remove("add-border");
     });
     message.classList.add("hide");
     player1InfoTag.classList.add("turn-indicator");
@@ -48,22 +49,10 @@ export const addTurnIndicatorUI = function (currentPlayer) {
     }
 }
 
-export const addAnimation = function (element, animationClass) {
-    element.classList.add(animationClass);
-    element.addEventListener("animationend", () => {
-        element.classList.remove(animationClass);
-    });
-}
-
-export const updateClassList = function (elements, className, type) {
-    if (type == "add") {
-        elements.forEach(element => {
-            element.classList.add(className)
-        })
-    }
-    if (type == "remove") {
-        elements.forEach(element => {
-            element.classList.remove(className)
-        })
-    }
+export const displayWinIndex = function (winIndex) {
+    boardItems.forEach(item => {
+        if (winIndex.includes(+item.dataset.index)){
+            item.classList.add("add-border");
+        }
+    })
 }
