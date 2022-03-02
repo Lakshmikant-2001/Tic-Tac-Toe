@@ -5,6 +5,13 @@ const player2InfoTag = document.querySelector("#player2-name");
 
 export const updateBoardUI = function (item, currentPlayer) {
     item.textContent = currentPlayer.mark;
+    item.classList.remove("available-board-item");
+}
+
+export const clearAvailableItem = function () {
+    boardItems.forEach(item => {
+        item.classList.remove("available-board-item")
+    });
 }
 
 export const displayResult = function (winner) {
@@ -23,8 +30,11 @@ export const displayResult = function (winner) {
 export const clearBoardUI = function () {
     boardItems.forEach(item => {
         item.textContent = "";
+        item.classList.add("available-board-item");
     });
     message.classList.add("hide");
+    player1InfoTag.classList.add("turn-indicator");
+    player2InfoTag.classList.remove("turn-indicator");
 }
 
 export const addTurnIndicatorUI = function (currentPlayer) {
@@ -34,6 +44,26 @@ export const addTurnIndicatorUI = function (currentPlayer) {
     }
     if (currentPlayer.no == 2) {
         player2InfoTag.classList.add("turn-indicator");
-        player2InfoTag.classList.remove("turn-indicator");
+        player1InfoTag.classList.remove("turn-indicator");
+    }
+}
+
+export const addAnimation = function (element, animationClass) {
+    element.classList.add(animationClass);
+    element.addEventListener("animationend", () => {
+        element.classList.remove(animationClass);
+    });
+}
+
+export const updateClassList = function (elements, className, type) {
+    if (type == "add") {
+        elements.forEach(element => {
+            element.classList.add(className)
+        })
+    }
+    if (type == "remove") {
+        elements.forEach(element => {
+            element.classList.remove(className)
+        })
     }
 }

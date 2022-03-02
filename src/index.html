@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic Tac Toe</title>
-  </head>
-  <body>
-    <main>
-      <h3 class="heading" id="game-title">tic tac toe</h3>
-      <section id="game-type-wrapper">
-        <div class="game-type heading" id="computer" tabindex="1">
-          <span>VS</span> COMPUTER
-        </div>
-        <div class="game-type heading" id="two-player" tabindex="1">
-          <span>VS</span> PLAYER-2
-        </div>
-      </section>
-      <section id="game-display-wrapper" class="none">
-        <div class="player-info">
-          <h5 id="player1-name" class="turn-indicator"></h5>
-        </div>
-        <div id="game-board">
-          <div class="heading grid-item" data-index="0"></div>
-          <div class="heading grid-item" data-index="1"></div>
-          <div class="heading grid-item" data-index="2"></div>
-          <div class="heading grid-item" data-index="3"></div>
-          <div class="heading grid-item" data-index="4"></div>
-          <div class="heading grid-item" data-index="5"></div>
-          <div class="heading grid-item" data-index="6"></div>
-          <div class="heading grid-item" data-index="7"></div>
-          <div class="heading grid-item" data-index="8"></div>
-        </div>
-        <div class="player-info">
-          <h5 id="player2-name"></h5>
-        </div>
-      </section>
-      <p class="message hide">a</p>
-      <section id="btn-wrapper">
-        <button class="btn" id="start-btn">start</button>
-        <button class="btn none" id="restart-btn">restart</button>
-        <button class="btn none" id="return-btn">return</button>
-      </section>
-    </main>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe</title>
+</head>
+
+<body>
+  <main>
+    <h3 class="heading" id="game-title">tic tac toe</h3>
+    <section id="game-type-wrapper">
+      <div class="game-type heading" id="computer" tabindex="1">
+        <span>VS</span> COMPUTER
+      </div>
+      <div class="game-type heading" id="two-player" tabindex="1">
+        <span>VS</span> PLAYER-2
+      </div>
+    </section>
+    <section id="game-display-wrapper" class="none">
+      <div class="player-info">
+        <h5 id="player1-name" class="turn-indicator"></h5>
+      </div>
+      <div id="game-board">
+        <div class="heading grid-item available-board-item" data-index="0"></div>
+        <div class="heading grid-item available-board-item" data-index="1"></div>
+        <div class="heading grid-item available-board-item" data-index="2"></div>
+        <div class="heading grid-item available-board-item" data-index="3"></div>
+        <div class="heading grid-item available-board-item" data-index="4"></div>
+        <div class="heading grid-item available-board-item" data-index="5"></div>
+        <div class="heading grid-item available-board-item" data-index="6"></div>
+        <div class="heading grid-item available-board-item" data-index="7"></div>
+        <div class="heading grid-item available-board-item" data-index="8"></div>
+      </div>
+      <div class="player-info">
+        <h5 id="player2-name"></h5>
+      </div>
+    </section>
+    <p class="message hide">a</p>
+    <section id="btn-wrapper">
+      <button class="btn" id="start-btn">start</button>
+      <button class="btn none" id="restart-btn">restart</button>
+      <button class="btn none" id="return-btn">return</button>
+    </section>
+  </main>
+</body>
+
 </html>

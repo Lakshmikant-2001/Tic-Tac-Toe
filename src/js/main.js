@@ -1,5 +1,5 @@
 import { playerFactory, gameFactory } from "./modules/_game-logic";
-import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI } from "./modules/_game-ui-update";
+import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, addAnimation, updateClassList, clearAvailableItem } from "./modules/_game-ui-update";
 
 const gameTypeDivs = document.querySelectorAll(".game-type");
 const gameTypeWrapper = document.querySelector("#game-type-wrapper");
@@ -10,6 +10,7 @@ const startGameBtn = document.querySelector("#start-btn");
 const restartBtn = document.querySelector("#restart-btn");
 const returnBtn = document.querySelector("#return-btn");
 const message = document.querySelector(".message");
+const gameBoard = document.querySelector("#game-board");
 const boardItems = document.querySelectorAll(".grid-item");
 
 let gameType;
@@ -44,18 +45,25 @@ function clearMessage() {
 
 function addGameTypeSelection(type) {
   gameType = type.id;
-  type.classList.add("add-animation", "add-border");
-  setTimeout(() => {
-    type.classList.remove("add-animation");
-  }, 750);
+  type.classList.add("add-border");
+  addAnimation(type, "bubble-up-animation")
 }
 
 //load game --> start button
 startGameBtn.addEventListener("click", () => {
-  loadGame();
+  canStartGame() ? startGame() : displayTypeSelPrompt()
+});
+
+function canStartGame() {
+  return (gameType == "computer" || gameType == "two-player");
+}
+
+function startGame() {
+  displayGameLayout();
+  addAnimation(gameBoard, "scale-in-animation");
   const players = specifyPlayers(gameType);
   const gameInstance = gameFactory(players[0], players[1]);
-  
+
   boardItems.forEach((item) => {
     item.addEventListener("click", (e) => {
       let item = e.currentTarget;
@@ -63,12 +71,11 @@ startGameBtn.addEventListener("click", () => {
       if (gameInstance.canMark(targetIndex)) {
         let currentPlayer = gameInstance.getCurrentPlayer();
         updateBoardUI(item, currentPlayer)
-        gameInstance.play(targetIndex);
-        //after play currentPlayer --> next player
-        addTurnIndicatorUI(gameInstance.getCurrentPlayer());
+        gameInstance.play(targetIndex);                         
+        addTurnIndicatorUI(gameInstance.getCurrentPlayer()); //after play currentPlayer --> next player
       }
-      //check for gameEnd 
-      if (gameInstance.isEnd()) {
+      if (gameInstance.isEnd()) {  //check for gameEnd 
+        clearAvailableItem()
         displayResult(gameInstance.getWinner())
       }
     })
@@ -76,21 +83,19 @@ startGameBtn.addEventListener("click", () => {
 
   restartBtn.addEventListener("click", () => {
     gameInstance.restart();
-    clearBoardUI()
+    clearBoardUI();
+    addAnimation(gameBoard, "scale-in-animation");
   });
-});
+}
 
-function loadGame() {
-  if (gameType == "computer" || gameType == "two-player") {
-    gameTypeWrapper.classList.add("none");
-    gameDisplayWrapper.classList.remove("none");
-    restartBtn.classList.remove("none");
-    returnBtn.classList.remove("none");
-    startGameBtn.classList.add("none");
-  } else {
-    message.classList.remove("hide");
-    message.textContent = "Please select one of the game type !";
-  }
+function displayTypeSelPrompt() {
+  message.classList.remove("hide");
+  message.textContent = "Please select one of the game type!";
+}
+
+function displayGameLayout() {
+  updateClassList([gameTypeWrapper, startGameBtn], "none", "add");
+  updateClassList([gameDisplayWrapper, restartBtn, returnBtn], "none", "remove")
 }
 
 function specifyPlayers(type) {

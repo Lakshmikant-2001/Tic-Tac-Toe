@@ -50,16 +50,16 @@
   border-color: #0a7753 !important;
 }
 
-.add-animation {
+.bubble-up-animation {
   &::before {
-    animation: slide-in-before 0.75s 1 linear;
+    animation: bubble-left 0.75s 1 linear;
   }
   &::after {
-    animation: slide-in-after 0.75s 1 linear;
+    animation: bubble-right 0.75s 1 linear;
   }
 }
 
-@keyframes slide-in-before {
+@keyframes bubble-left {
   50% {
     transform: translate(-65%, 55%);
   }
@@ -68,7 +68,7 @@
   }
 }
 
-@keyframes slide-in-after {
+@keyframes bubble-right {
   50% {
     transform: translate(65%, -55%);
   }
