@@ -1,6 +1,6 @@
 import { playerFactory, gameFactory } from "./modules/_game-logic";
 import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, clearAvailableItem, displayWinIndex } from "./modules/_game-ui-update";
-import { addAnimation, updateClassList } from "./modules/_utils";
+import { addAnimation, updateClassList, findItem, blockPointerEvents, unblockPointerEvents } from "./modules/_utils";
 
 const gameTypeDivs = document.querySelectorAll(".game-type");
 const gameTypeWrapper = document.querySelector("#game-type-wrapper");
@@ -13,7 +13,6 @@ const returnBtn = document.querySelector("#return-btn");
 const message = document.querySelector(".message");
 const gameBoard = document.querySelector("#game-board");
 const boardItems = document.querySelectorAll(".grid-item");
-
 let gameType;
 
 //game type selection --> game type divs
@@ -64,22 +63,9 @@ function startGame() {
   addAnimation(gameBoard, "scale-in-animation");
   const players = specifyPlayers(gameType);
   const gameInstance = gameFactory(players[0], players[1]);
-
   boardItems.forEach((item) => {
     item.addEventListener("click", (e) => {
-      let item = e.currentTarget;
-      let targetIndex = item.dataset.index;
-      if (gameInstance.canMark(targetIndex)) {
-        let currentPlayer = gameInstance.getCurrentPlayer();
-        gameInstance.play(targetIndex);
-        updateBoardUI(item, currentPlayer);
-        addTurnIndicatorUI(gameInstance.getCurrentPlayer()); //after play currentPlayer --> next player
-      }
-      if (gameInstance.isEnd()) {  //check for gameEnd 
-        clearAvailableItem()
-        displayResult(gameInstance.getWinner());
-        displayWinIndex(gameInstance.getWinIndex());
-      }
+      playGame(e, gameInstance)
     })
   });
 
@@ -90,6 +76,41 @@ function startGame() {
   });
 }
 
+function playGame(e, gameInstance) {
+  let item = e.currentTarget;
+  let targetIndex = item.dataset.index;
+  let currentPlayer = gameInstance.getCurrentPlayer(), nextPlayer;
+  let canMark = gameInstance.canMark(targetIndex);
+
+  if (canMark) {
+    updateBoardUI(item, currentPlayer);
+    gameInstance.play(targetIndex);
+    nextPlayer = gameInstance.getCurrentPlayer(); //after play currentPlayer --> next player
+    addTurnIndicatorUI(nextPlayer);
+    gameInstance.isEnd() ? endGame(gameInstance) : "";
+  }
+  if (gameInstance.isVsComputer() && canMark) {
+    gameInstance.aiPlay()
+    currentPlayer = nextPlayer;
+    nextPlayer = gameInstance.getCurrentPlayer();
+    const targetIndex = gameInstance.getAiIndex();
+    const item = findItem(targetIndex);
+    blockPointerEvents();
+    setTimeout(() => {
+      updateBoardUI(item, currentPlayer);
+      addTurnIndicatorUI(nextPlayer);
+      unblockPointerEvents();
+      gameInstance.isEnd() ? endGame(gameInstance) : "";
+    }, 500);
+  }
+}
+
+function endGame(gameInstance) {
+  clearAvailableItem()
+  displayResult(gameInstance.getWinner());
+  displayWinIndex(gameInstance.getWinIndex());
+}
+
 function displayTypeSelPrompt() {
   message.classList.remove("hide");
   message.textContent = "Please select one of the game type!";
@@ -97,7 +118,7 @@ function displayTypeSelPrompt() {
 
 function displayGameLayout() {
   updateClassList([gameTypeWrapper, startGameBtn], "none", "add");
-  updateClassList([gameDisplayWrapper, restartBtn, returnBtn], "none", "remove")
+  updateClassList([gameDisplayWrapper, restartBtn, returnBtn], "none", "remove");
 }
 
 function specifyPlayers(type) {
