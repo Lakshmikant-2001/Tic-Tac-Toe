@@ -11,7 +11,7 @@
     height: 85px;
     padding: 1rem 2.2rem;
     background-color: #cccccc30;
-    font-size: 2.7rem !important;
+    font-size: 2.7rem;
     font-weight: bolder;
     border-radius: 0.3rem;
     box-shadow: inset 3px 5px 10px #0a775350;
@@ -24,13 +24,21 @@
     }
   }
 
-  .add-border {
-    box-shadow: inset -3px 4px 8px #00aa7780, inset 2px -2px 6px #ffffff80;
+  .win-index-animation {
+    animation: shadow-rotate 1s infinite ease-out;
+  }
+
+  .draw-animation{
+    animation: blink-item 1s infinite ease-out;
   }
 }
 
 .scale-in-animation {
   animation: scale-in 0.75s 1 linear;
+}
+
+.scale-out-animation {
+  animation: scale-out 0.75s 1s 1 linear;
 }
 
 #game-display-wrapper {
@@ -74,5 +82,43 @@
 
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes shadow-rotate {
+  0% {
+    box-shadow: inset -3px 4px 8px #00aa7780, inset 2px -2px 6px #ffffff80;
+  }
+  25% {
+    box-shadow: inset -7px -6px 15px #00aa7780, inset 6px 5px 10px #ffffff80;
+  }
+  50%{
+    box-shadow: inset -7px -6px 12px #ffffff80, inset 6px 5px 10px #00aa7780;
+  }
+  75%{ 
+    box-shadow: inset -3px 4px 8px #ffffff80, inset 2px -2px 6px #00aa7780;
+  }
+  100%{
+    box-shadow: inset -3px 4px 8px #00aa7780, inset 2px -2px 6px #ffffff80;
+  }
+}
+
+@keyframes blink-item {
+  to{
+    box-shadow: inset 3px 4px 10px #00aa7770, inset -3px -4px 10px #00aa7770;
   }
 }

@@ -1,5 +1,5 @@
 import { playerFactory, gameFactory } from "./modules/_game-logic";
-import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, clearAvailableItem, displayWinIndex } from "./modules/_game-ui-update";
+import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, clearAvailableItem, displayWinIndex, displayDrawAnimation } from "./modules/_game-ui-update";
 import { addAnimation, updateClassList, findItem, blockPointerEvents, unblockPointerEvents } from "./modules/_utils";
 
 const gameTypeDivs = document.querySelectorAll(".game-type");
@@ -70,7 +70,7 @@ function startGame() {
   });
 
   restartBtn.addEventListener("click", () => {
-    gameInstance.restart();
+    gameInstance.reset();
     clearBoardUI();
     addAnimation(gameBoard, "scale-in-animation");
   });
@@ -106,9 +106,20 @@ function playGame(e, gameInstance) {
 }
 
 function endGame(gameInstance) {
+  blockPointerEvents();
   clearAvailableItem()
   displayResult(gameInstance.getWinner());
+  displayDrawAnimation(gameInstance.getWinner());
   displayWinIndex(gameInstance.getWinIndex());
+  addAnimation(gameBoard, "scale-out-animation");
+  gameBoard.addEventListener("animationend", (e) => {
+    if (e.animationName == "scale-out") {
+      gameInstance.reset();
+      clearBoardUI();
+      addAnimation(gameBoard, "scale-in-animation");
+      unblockPointerEvents();
+    }
+  })
 }
 
 function displayTypeSelPrompt() {

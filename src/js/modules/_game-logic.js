@@ -183,12 +183,12 @@ export const gameFactory = function (player1, player2) {
     }
   }
 
-  const restart = function () {
+  const reset = function () {
     [winner, aiMove] = [null, null];
     winIndex = ["", "", ""];
     currentPlayer = player1;
     initGameBoard();
   };
 
-  return { play, restart, isEnd, getWinner, canMark, getCurrentPlayer, getWinIndex, isVsComputer, aiPlay, getAiIndex };
+  return { play, reset, isEnd, getWinner, canMark, getCurrentPlayer, getWinIndex, isVsComputer, aiPlay, getAiIndex };
 };
