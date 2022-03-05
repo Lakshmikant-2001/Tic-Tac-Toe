@@ -29,7 +29,7 @@ export const gameFactory = function (player1, player2) {
     return winner;
   }
 
-  const checkEmptyCells = function () {
+  const getEmptyCells = function () {
     let emptyCells = [];
     for (let i = 0; i < 9; i++) {
       if (gameBoard[i] == "") {
@@ -40,11 +40,11 @@ export const gameFactory = function (player1, player2) {
   }
 
   const canMark = function (targetIndex) {
-    return (checkEmptyCells().includes(+targetIndex) && !isEnd());
+    return (getEmptyCells().includes(+targetIndex) && !isEnd());
   }
 
   const isEnd = function () {
-    return (checkEmptyCells().length == 0 || winner != undefined || winner != null);
+    return (getEmptyCells().length == 0 || winner != undefined || winner != null);
   };
 
   const isVsComputer = function () {
@@ -69,38 +69,8 @@ export const gameFactory = function (player1, player2) {
     return aiMove;
   }
 
-  const play = function (targetIndex) {
-    if (getCurrentPlayer() == player1 && canMark(targetIndex)) {
-      gameBoard[targetIndex] = player1.mark;
-      isWinner(player1);
-      setCurrentPlayer(player2);
-    }
-    if (getCurrentPlayer() == player2 && canMark(targetIndex)) {
-      gameBoard[targetIndex] = player2.mark;
-      isWinner(player2);
-      setCurrentPlayer(player1);
-    }
-  };
-
-  const aiPlay = function () {
-    if (!isEnd() && getCurrentPlayer() == player2) {
-      let targetIndex = generateRandomIndex();
-      gameBoard[targetIndex] = player2.mark;
-      setAiMove(targetIndex);
-      isWinner(player2);
-      setCurrentPlayer(player1);
-    }
-  }
-
-  const restart = function () {
-    [winner,aiMove] = [null,null];
-    winIndex = ["", "", ""];
-    currentPlayer = player1;
-    initGameBoard();
-  };
-
-  const setWinIndex = function (i1, i2, i3) {
-    winIndex = [i1, i2, i3];
+  const setWinIndex = function (indexArray) {
+    indexArray.forEach(index => winIndex.push(index));
   }
 
   const getWinIndex = function () {
@@ -108,6 +78,7 @@ export const gameFactory = function (player1, player2) {
   }
 
   const isWinner = function (player) {
+    let isWinner, winIndex;
     let probableIndex = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8], //row
       [0, 3, 6], [1, 4, 7], [2, 5, 8], //column
@@ -115,10 +86,108 @@ export const gameFactory = function (player1, player2) {
     ];
     probableIndex.forEach(index => {
       if ((gameBoard[index[0]] == player.mark && gameBoard[index[1]] == player.mark && gameBoard[index[2]] == player.mark)) {
-        setWinner(player);
-        setWinIndex(index[0], index[1], index[2]);
+        isWinner = true;
+        winIndex = [index[0], index[1], index[2]];
       }
     })
+    return [isWinner, winIndex];
+  };
+
+  //Human -> minimizing player, Computer -> maximizing player 
+  const miniMax = function (currBoard, currPlayer) {
+    const availableCells = getEmptyCells();
+    let allPossibleMoves = [];
+
+    if (isWinner(player1)[0]) {
+      return { score: -1 };
+    }
+    if (isWinner(player2)[0]) {
+      return { score: 1 };
+    }
+    if (availableCells.length == 0) {
+      return { score: 0 };
+    }
+
+    for (let i = 0; i < availableCells.length; i++) {
+      let currMove = {};
+      currMove.index = availableCells[i];
+      currBoard[availableCells[i]] = currPlayer.mark;
+      if (currPlayer == player1) {
+        currMove.score = miniMax(currBoard, player2).score; //recursive miniMax call
+      }
+      if (currPlayer == player2) {
+        currMove.score = miniMax(currBoard, player1).score; //recursive miniMax call
+      }
+      allPossibleMoves.push(currMove);
+      currBoard[availableCells[i]] = "";  //resetBoard
+    }
+    return getBestMove(allPossibleMoves, currPlayer);
+  }
+
+  const getBestMove = function (moves, player) {
+    let bestMove, bestScore;
+    if (player == player1) {
+      bestScore = Infinity;
+      moves.forEach(move => {
+        if (move.score < bestScore) {  // minimizing player --> min(bestScore,moveScore)
+          bestScore = move.score;
+          bestMove = move;
+        }
+      })
+    }
+    if (player == player2) {
+      bestScore = -Infinity;
+      moves.forEach(move => {
+        if (move.score > bestScore) {  // maximinzing player --> max(bestScore,moveScore)
+          bestScore = move.score;
+          bestMove = move;
+        }
+      })
+    }
+    return bestMove;
+  }
+
+  const play = function (targetIndex) {
+    if (getCurrentPlayer() == player1 && canMark(targetIndex)) {
+      gameBoard[targetIndex] = player1.mark;
+      setCurrentPlayer(player2);
+      const result = isWinner(player1);
+      if (result[0]) {
+        setWinner(player1);
+        setWinIndex(result[1]);
+      }
+    }
+    if (getCurrentPlayer() == player2 && canMark(targetIndex)) {
+      gameBoard[targetIndex] = player2.mark;
+      setCurrentPlayer(player1);
+      const result = isWinner(player2);
+      if (result[0]) {
+        setWinner(player2);
+        setWinIndex(result[1]);
+      }
+    }
+  };
+
+  const aiPlay = function () {
+    if (!isEnd() && getCurrentPlayer() == player2) {
+      const aiMove = miniMax(gameBoard, player2);
+      let targetIndex = aiMove.index;
+      gameBoard[targetIndex] = player2.mark;
+      setAiMove(targetIndex);
+      setCurrentPlayer(player1);
+      const result = isWinner(player2);
+      if (result[0]) {
+        setWinner(player2)
+        setWinIndex(result[1]);
+      }
+    }
+  }
+
+  const restart = function () {
+    [winner, aiMove] = [null, null];
+    winIndex = ["", "", ""];
+    currentPlayer = player1;
+    initGameBoard();
   };
 
   return { play, restart, isEnd, getWinner, canMark, getCurrentPlayer, getWinIndex, isVsComputer, aiPlay, getAiIndex };
