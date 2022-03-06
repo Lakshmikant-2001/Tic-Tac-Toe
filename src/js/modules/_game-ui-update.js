@@ -1,8 +1,11 @@
 const message = document.querySelector(".message");
-const gameBoard = document.querySelector("#game-board");
 const boardItems = document.querySelectorAll(".grid-item");
-const player1InfoTag = document.querySelector("#player1-name");
-const player2InfoTag = document.querySelector("#player2-name");
+const player1InfoTag = document.querySelector("#player1-info");
+const player2InfoTag = document.querySelector("#player2-info");
+const player1NameTag = document.querySelector("#player1-name");
+const player2NameTag = document.querySelector("#player2-name");
+const player1ScoreTag = document.querySelector("#player1-score");
+const player2ScoreTag = document.querySelector("#player2-score");
 
 export const updateBoardUI = function (item, currentPlayer) {
     item.textContent = currentPlayer.mark;
@@ -64,4 +67,14 @@ export const displayDrawAnimation = function (winner) {
             item.classList.add("draw-animation");
         })
     }
+}
+
+export const updateScore = function(scores){
+    player1ScoreTag.textContent = scores[0];
+    player2ScoreTag.textContent = scores[1];
+}
+
+export const clearScoreUI = function(){
+    player1ScoreTag.textContent = "0";
+    player2ScoreTag.textContent = "0";
 }

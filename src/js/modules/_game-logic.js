@@ -1,5 +1,5 @@
-export const playerFactory = function (no, name, turn, mark) {
-  return { no, name, turn, mark };
+export const playerFactory = function (no, name, turn, mark, score) {
+  return { no, name, turn, mark, score };
 };
 
 export const gameFactory = function (player1, player2) {
@@ -93,6 +93,14 @@ export const gameFactory = function (player1, player2) {
     return [isWinner, winIndex];
   };
 
+  const setScore = function(player){
+    player.score++;
+  }
+
+  const getScore = function(){
+    return [player1.score,player2.score];
+  }
+
   //Human -> minimizing player, Computer -> maximizing player 
   const miniMax = function (currBoard, currPlayer) {
     const availableCells = getEmptyCells();
@@ -155,6 +163,7 @@ export const gameFactory = function (player1, player2) {
       if (result[0]) {
         setWinner(player1);
         setWinIndex(result[1]);
+        setScore(player2);
       }
     }
     if (getCurrentPlayer() == player2 && canMark(targetIndex)) {
@@ -164,6 +173,7 @@ export const gameFactory = function (player1, player2) {
       if (result[0]) {
         setWinner(player2);
         setWinIndex(result[1]);
+        setScore(player2)
       }
     }
   };
@@ -179,6 +189,7 @@ export const gameFactory = function (player1, player2) {
       if (result[0]) {
         setWinner(player2)
         setWinIndex(result[1]);
+        setScore(player2)
       }
     }
   }
@@ -190,5 +201,12 @@ export const gameFactory = function (player1, player2) {
     initGameBoard();
   };
 
-  return { play, reset, isEnd, getWinner, canMark, getCurrentPlayer, getWinIndex, isVsComputer, aiPlay, getAiIndex };
+  const restart = function(){
+    reset();
+    player1.score = 0;
+    player2.score = 0;
+  }
+
+  return { play, reset, isEnd, getWinner, canMark, getCurrentPlayer,
+     getWinIndex, isVsComputer, aiPlay, getAiIndex, getScore, restart };
 };

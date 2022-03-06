@@ -1,12 +1,15 @@
 import { playerFactory, gameFactory } from "./modules/_game-logic";
-import { displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, clearAvailableItem, displayWinIndex, displayDrawAnimation } from "./modules/_game-ui-update";
+import {
+  displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI,
+  clearAvailableItem, displayWinIndex, displayDrawAnimation, updateScore, clearScoreUI
+} from "./modules/_game-ui-update";
 import { addAnimation, updateClassList, findItem, blockPointerEvents, unblockPointerEvents } from "./modules/_utils";
 
 const gameTypeDivs = document.querySelectorAll(".game-type");
 const gameTypeWrapper = document.querySelector("#game-type-wrapper");
 const gameDisplayWrapper = document.querySelector("#game-display-wrapper");
-const player1InfoTag = document.querySelector("#player1-name");
-const player2InfoTag = document.querySelector("#player2-name");
+const player1NameTag = document.querySelector("#player1-name");
+const player2NameTag = document.querySelector("#player2-name");
 const startGameBtn = document.querySelector("#start-btn");
 const restartBtn = document.querySelector("#restart-btn");
 const returnBtn = document.querySelector("#return-btn");
@@ -70,8 +73,9 @@ function startGame() {
   });
 
   restartBtn.addEventListener("click", () => {
-    gameInstance.reset();
+    gameInstance.restart();
     clearBoardUI();
+    clearScoreUI();
     addAnimation(gameBoard, "scale-in-animation");
   });
 }
@@ -111,6 +115,7 @@ function endGame(gameInstance) {
   displayResult(gameInstance.getWinner());
   displayDrawAnimation(gameInstance.getWinner());
   displayWinIndex(gameInstance.getWinIndex());
+  updateScore(gameInstance.getScore());
   addAnimation(gameBoard, "scale-out-animation");
   gameBoard.addEventListener("animationend", (e) => {
     if (e.animationName == "scale-out") {
@@ -133,20 +138,18 @@ function displayGameLayout() {
 }
 
 function specifyPlayers(type) {
+  let player1, player2;
   if (type == "computer") {
-    const player1 = playerFactory(1, "human", true, "X");
-    const player2 = playerFactory(2, "computer", false, "O");
-    player1InfoTag.textContent += player1.name;
-    player2InfoTag.textContent += player2.name;
-    return [player1, player2];
+    player1 = playerFactory(1, "human", true, "X", 0);
+    player2 = playerFactory(2, "computer", false, "O", 0);
   }
   if (type == "two-player") {
-    const player1 = playerFactory(1, "human-1", true, "X");
-    const player2 = playerFactory(2, "human-2", false, "O");
-    player1InfoTag.textContent += player1.name;
-    player2InfoTag.textContent += player2.name;
-    return [player1, player2];
+    player1 = playerFactory(1, "human-1", true, "X", 0);
+    player2 = playerFactory(2, "human-2", false, "O", 0);
   }
+  player1NameTag.textContent += player1.name;
+  player2NameTag.textContent += player2.name;
+  return [player1, player2];
 }
 
 //return to main menu
