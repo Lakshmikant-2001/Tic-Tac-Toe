@@ -20,8 +20,13 @@
       </div>
     </section>
     <section id="game-display-wrapper" class="none">
-      <div class="player-info">
-        <h5 id="player1-name" class="turn-indicator"></h5>
+      <div class="player-card">
+        <div id="player1-info" class="player-info turn-indicator player-box">
+          <h5 id="player1-name" class="player-name"></h5>
+          <span>-</span>
+          <p id="player1-mark" class="player-mark">X</p>
+        </div>
+        <p id="player1-score" class="player-score player-box">0</p>
       </div>
       <div id="game-board">
         <div class="heading grid-item available-board-item" data-index="0"></div>
@@ -34,8 +39,13 @@
         <div class="heading grid-item available-board-item" data-index="7"></div>
         <div class="heading grid-item available-board-item" data-index="8"></div>
       </div>
-      <div class="player-info">
-        <h5 id="player2-name"></h5>
+      <div class="player-card">
+        <div id="player2-info" class="player-info player-box">
+          <h5 id="player2-name" class="player-name"></h5>
+          <span>-</span>
+          <p id="player2-mark" class="player-mark">O</p>
+        </div>
+        <p id="player2-score" class="player-score player-box">0</p>
       </div>
     </section>
     <p class="message hide">a</p>
