@@ -3,7 +3,7 @@ export const playerFactory = function (no, name, turn, mark, score) {
 };
 
 export const gameFactory = function (player1, player2) {
-  let gameBoard = [], winner, currentPlayer = player1, winIndex = ["", "", ""], aiMove;
+  let gameBoard = [], winner, currentPlayer = player1, winIndex = ["", "", ""], aiMove, level = "random";
 
   const initGameBoard = function () {
     for (let i = 0; i < 9; i++) {
@@ -93,12 +93,16 @@ export const gameFactory = function (player1, player2) {
     return [isWinner, winIndex];
   };
 
-  const setScore = function(player){
+  const setScore = function (player) {
     player.score++;
   }
 
-  const getScore = function(){
-    return [player1.score,player2.score];
+  const getScore = function () {
+    return [player1.score, player2.score];
+  }
+
+  const setAiLevel = function (reqLevel) {
+    level = reqLevel;
   }
 
   //Human -> minimizing player, Computer -> maximizing player 
@@ -180,8 +184,14 @@ export const gameFactory = function (player1, player2) {
 
   const aiPlay = function () {
     if (!isEnd() && getCurrentPlayer() == player2) {
-      const aiMove = miniMax(gameBoard, player2);
-      let targetIndex = aiMove.index;
+      let targetIndex;
+      if (level == "random") {
+        targetIndex = generateRandomIndex();
+      }
+      if (level == "unbeatable") {
+        const aiMove = miniMax(gameBoard, player2);
+        targetIndex = aiMove.index;
+      }
       gameBoard[targetIndex] = player2.mark;
       setAiMove(targetIndex);
       setCurrentPlayer(player1);
@@ -201,12 +211,15 @@ export const gameFactory = function (player1, player2) {
     initGameBoard();
   };
 
-  const restart = function(){
+  const restart = function () {
     reset();
     player1.score = 0;
     player2.score = 0;
+    level = "random";
   }
 
-  return { play, reset, isEnd, getWinner, canMark, getCurrentPlayer,
-     getWinIndex, isVsComputer, aiPlay, getAiIndex, getScore, restart };
+  return {
+    play, reset, isEnd, getWinner, canMark, getCurrentPlayer,
+    getWinIndex, isVsComputer, aiPlay, getAiIndex, getScore, restart, setAiLevel
+  };
 };

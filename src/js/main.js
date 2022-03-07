@@ -1,10 +1,14 @@
 import { playerFactory, gameFactory } from "./modules/_game-logic";
 import {
-  displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI,
-  clearAvailableItem, displayWinIndex, displayDrawAnimation, updateScore, clearScoreUI
+  displayResult, updateBoardUI, clearBoardUI, addTurnIndicatorUI, clearAvailableItem,
+  displayWinIndex, displayDrawAnimation, updateScore, clearScoreUI, removeCurrentLevel,
+  clearAiLvl
 } from "./modules/_game-ui-update";
-import { addAnimation, updateClassList, findItem, blockPointerEvents, unblockPointerEvents } from "./modules/_utils";
+import {
+  addAnimation, updateClassList, findItem, blockPointerEvents, unblockPointerEvents
+} from "./modules/_utils";
 
+const body = document.querySelector("body");
 const gameTypeDivs = document.querySelectorAll(".game-type");
 const gameTypeWrapper = document.querySelector("#game-type-wrapper");
 const gameDisplayWrapper = document.querySelector("#game-display-wrapper");
@@ -16,6 +20,9 @@ const returnBtn = document.querySelector("#return-btn");
 const message = document.querySelector(".message");
 const gameBoard = document.querySelector("#game-board");
 const boardItems = document.querySelectorAll(".grid-item");
+const aiLvlSettingsBtn = document.querySelector(".level-settings-btn");
+const aiLvlOptionsWrapper = document.querySelector(".level-options");
+const aiLvlOptions = document.querySelectorAll(".level-options > *");
 let gameType;
 
 //game type selection --> game type divs
@@ -66,6 +73,7 @@ function startGame() {
   addAnimation(gameBoard, "scale-in-animation");
   const players = specifyPlayers(gameType);
   const gameInstance = gameFactory(players[0], players[1]);
+  addAiLevelsOption(gameInstance);
   boardItems.forEach((item) => {
     item.addEventListener("click", (e) => {
       playGame(e, gameInstance)
@@ -76,6 +84,7 @@ function startGame() {
     gameInstance.restart();
     clearBoardUI();
     clearScoreUI();
+    clearAiLvl();
     addAnimation(gameBoard, "scale-in-animation");
   });
 }
@@ -151,6 +160,42 @@ function specifyPlayers(type) {
   player2NameTag.textContent += player2.name;
   return [player1, player2];
 }
+
+function addAiLevelsOption(gameInstance) {
+  if (gameInstance.isVsComputer()) {
+    aiLvlSettingsBtn.classList.remove("none");
+    aiLvlSettingsBtn.addEventListener("click", () => {
+      aiLvlOptionsWrapper.classList.contains("none") ? dispAiLevels(gameInstance)
+        : aiLvlOptionsWrapper.classList.add("none");
+    });
+  }
+}
+
+function dispAiLevels(gameInstance) {
+  aiLvlOptionsWrapper.classList.remove("none");
+  aiLvlOptions.forEach(option => {
+    option.addEventListener("click", () => {
+      removeCurrentLevel();
+      changeAiLevel(option, gameInstance);
+    });
+  });
+}
+
+function changeAiLevel(option, gameInstance) {
+  let aiLevel = option.getAttribute("value");
+  gameInstance.setAiLevel(aiLevel);
+  option.classList.add("current-level");
+  //reset board
+  gameInstance.reset();
+  clearBoardUI();
+  addAnimation(gameBoard, "scale-in-animation");
+}
+
+body.addEventListener("click", (e) => {
+  if (!aiLvlSettingsBtn.contains(e.target) && !aiLvlOptionsWrapper.classList.contains("none")) {
+    aiLvlOptionsWrapper.classList.add("none");
+  }
+});
 
 //return to main menu
 returnBtn.addEventListener("click", () => {
