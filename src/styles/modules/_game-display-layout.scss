@@ -91,7 +91,7 @@
   .level-settings-wrapper {
     width: 100%;
     position: absolute;
-    top: 30%;
+    top: 25%;
     left: 20%;
     @include flex(column, $align: flex-end);
   }
@@ -102,11 +102,11 @@
   }
 
   .level-settings-btn {
-    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
     transform: rotate(0deg);
     transition: transform 0.3s linear;
     border-radius: 20%;
     padding: 0.3rem;
+    width: clamp(30px, 3vw, 35px);
     cursor: pointer;
 
     &:hover,
