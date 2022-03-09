@@ -1,6 +1,6 @@
 #game-type-wrapper {
   .game-type {
-    width: 50%;
+    width: Max(33.3%, 250px);
     @include flex(column);
     padding: 3rem 0;
     margin: 0 2rem;
@@ -8,7 +8,7 @@
     background-color: #cccccc20;
     border: 4px solid transparent;
     text-align: center;
-    font-size: 2rem;
+    font-size: var(--medium-font-size);
     word-spacing: 100vw;
     line-height: 4rem;
     position: relative;
@@ -21,7 +21,7 @@
     }
 
     span::first-letter {
-      font-size: 2.8rem;
+      font-size: var(--large-font-size);
     }
 
     &::before,
@@ -74,5 +74,41 @@
   }
   100% {
     transform: translate(80%, -70%);
+  }
+}
+
+@media (max-width: 1200px) {
+  #game-type-wrapper {
+    .game-type {
+      padding: 2.5rem 0;
+    }
+  }
+}
+
+@media (max-width: 750px) {
+  #game-type-wrapper {
+    .game-type {
+      margin: 1.5rem 2rem;
+      padding: 2rem 0;
+      line-height: 3.5rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  #game-type-wrapper {
+    .game-type {
+      margin: 1.5rem;
+      padding: 1.5rem 0;
+      line-height: 3rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  #game-type-wrapper {
+    .game-type {
+      margin: 1rem 1.5rem;
+    }
   }
 }

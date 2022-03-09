@@ -3,15 +3,14 @@
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
-  user-select: none;
 
   .grid-item {
     @include flex();
-    width: 105px;
-    height: 85px;
+    width: Max(5.4vw, 90px);
+    height: Max(4.4vw, 75px);
     padding: 1rem 2.2rem;
     background-color: #cccccc30;
-    font-size: 2.7rem;
+    font-size: var(--large-font-size);
     font-weight: bolder;
     border-radius: 0.3rem;
     box-shadow: inset 3px 5px 10px #0a775350;
@@ -37,31 +36,31 @@
   }
 }
 
-.scale-in-animation {
-  animation: scale-in 0.75s 1 linear;
-}
-
-.scale-out-animation {
-  animation: scale-out 0.75s 1s 1 linear;
-}
-
 #game-display-wrapper {
+  .player-card,
+  #game-board {
+    margin: 1rem;
+  }
+
   .player-card {
     @include flex(column);
     width: 20%;
-    font-size: 1.5rem;
   }
 
   .player-info {
     @include flex();
-    width: 100%;
+    width: Max(100%, 180px);
     position: relative;
-    padding: 1rem 0;
+    padding: 1rem 1.5rem;
     text-transform: uppercase;
 
     span {
       margin: 0 0.5rem;
     }
+  }
+
+  .player-name {
+    font-size: var(--small-font-size);
   }
 
   .player-box {
@@ -75,7 +74,6 @@
 
   .player-mark {
     -webkit-text-stroke: 1px #00aa7780;
-    font-size: 1.7rem;
     font-weight: bolder;
   }
 
@@ -99,7 +97,7 @@
   }
 
   .level-settings-btn {
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
     transform: rotate(0deg);
     transition: transform 0.3s linear;
     cursor: pointer;
@@ -110,9 +108,10 @@
   }
 
   .level-options {
+    background-color: #081824;
     margin-top: 1.5rem;
     text-transform: initial;
-    font-size: 1rem;
+    font-size: var(--tiny-font-size);
     list-style: none;
   }
 
@@ -147,6 +146,14 @@
     background-color: #0a7;
     border-left: 2px solid #fff;
   }
+}
+
+.scale-in-animation {
+  animation: scale-in 0.75s 1 linear;
+}
+
+.scale-out-animation {
+  animation: scale-out 0.75s 1s 1 linear;
 }
 
 @keyframes scale-in {
@@ -198,5 +205,76 @@
 @keyframes blink-item {
   to {
     box-shadow: inset 3px 4px 10px #ffffff50, inset -3px -4px 10px #ffffff50;
+  }
+}
+
+@media (max-width: 910px) {
+  #game-display-wrapper {
+    #game-board {
+      order: 2;
+    }
+
+    .player-card,
+    #game-board {
+      margin: 1.5rem 2rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  #game-display-wrapper {
+    .player-info {
+      padding: 0.7rem 1rem;
+    }
+
+    .player-score {
+      padding: 0.3rem 0.8rem;
+    }
+
+    .level-settings-wrapper {
+      left: -20%;
+      align-items: flex-start;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  #game-display-wrapper {
+    #game-board {
+      order: unset;
+    }
+
+    .player-card {
+      flex-direction: row;
+      width: unset;
+    }
+
+    #game-board,
+    .player-card {
+      margin: 2rem 1rem;
+    }
+
+    .player-score,
+    .player-info {
+      margin: 0 1rem;
+    }
+
+    .turn-indicator {
+      &::before {
+        width: 6px;
+        height: 6px;
+      }
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  #game-board {
+    grid-gap: 0.6rem;
+
+    .grid-item {
+      width: Max(5.4vw, 80px);
+      height: Max(4.4vw, 65px);
+    }
   }
 }

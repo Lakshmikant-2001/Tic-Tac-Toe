@@ -1,7 +1,7 @@
 .heading {
-  font-size: 2.2rem;
+  font-size: var(--heading-font-size);
   text-transform: uppercase;
-  text-shadow: 2px 3px 0 #444;
+  text-shadow: 2px 2px 0px #444;
 }
 
 .btn {
