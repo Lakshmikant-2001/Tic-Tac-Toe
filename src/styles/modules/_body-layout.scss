@@ -45,16 +45,22 @@ main {
 }
 
 .repo-link {
+  @include flex();
   position: absolute;
   top: 0%;
   right: 0%;
-  margin:clamp(1rem, 2vw, 2rem);
-  color: #0a7753;
+  margin: clamp(1rem, 2vw, 2rem);
   font-size: clamp(2rem, 2vw, 2.5rem);
-  transition: transform .3s linear;
+  border-radius: 50%;
+  transition: transform 0.3s linear;
 
-  &:hover{
-    transform: scale(1.2);
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
+
+  &:focus-visible {
+    outline: 3px dashed #0a7753;
   }
 }
 

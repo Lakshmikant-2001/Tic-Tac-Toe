@@ -28,14 +28,12 @@ let gameType;
 //game type selection --> game type divs
 gameTypeDivs.forEach((gameTypeDiv) => {
   gameTypeDiv.addEventListener("click", () => {
-    gameTypeDiv.blur();
     clearSelection();
     clearMessage();
     addGameTypeSelection(gameTypeDiv);
   });
   gameTypeDiv.addEventListener("keydown", (e) => {
     if (e.key == "Enter") {
-      gameTypeDiv.blur();
       clearSelection();
       clearMessage();
       addGameTypeSelection(gameTypeDiv);
@@ -61,7 +59,7 @@ function addGameTypeSelection(type) {
 
 //load game --> start button
 startGameBtn.addEventListener("click", () => {
-  canStartGame() ? startGame() : displayTypeSelPrompt()
+  canStartGame() ? startGame() : displayTypeSelPrompt();
 });
 
 function canStartGame() {
@@ -76,7 +74,11 @@ function startGame() {
   addAiLevelsOption(gameInstance);
   boardItems.forEach((item) => {
     item.addEventListener("click", (e) => {
-      playGame(e, gameInstance)
+      playGame(e, gameInstance);
+    });
+    item.addEventListener("keypress", (e) => {
+      if (e.key == "Enter")
+        playGame(e, gameInstance);
     })
   });
 
@@ -91,10 +93,10 @@ function startGame() {
 
 function playGame(e, gameInstance) {
   let item = e.currentTarget;
+  item.blur();
   let targetIndex = item.dataset.index;
   let currentPlayer = gameInstance.getCurrentPlayer(), nextPlayer;
   let canMark = gameInstance.canMark(targetIndex);
-
   if (canMark) {
     updateBoardUI(item, currentPlayer);
     gameInstance.play(targetIndex);
@@ -168,6 +170,12 @@ function addAiLevelsOption(gameInstance) {
       aiLvlOptionsWrapper.classList.contains("none") ? dispAiLevels(gameInstance)
         : aiLvlOptionsWrapper.classList.add("none");
     });
+    aiLvlSettingsBtn.addEventListener("keypress", (e) => {
+      if (e.key == "Enter") {
+        aiLvlOptionsWrapper.classList.contains("none") ? dispAiLevels(gameInstance)
+          : aiLvlOptionsWrapper.classList.add("none");
+      }
+    });
   }
 }
 
@@ -177,6 +185,12 @@ function dispAiLevels(gameInstance) {
     option.addEventListener("click", () => {
       removeCurrentLevel();
       changeAiLevel(option, gameInstance);
+    });
+    option.addEventListener("keypress", (e) => {
+      if (e.key == "Enter") {
+        removeCurrentLevel();
+        changeAiLevel(option, gameInstance);
+      }
     });
   });
 }
@@ -193,6 +207,12 @@ function changeAiLevel(option, gameInstance) {
 
 body.addEventListener("click", (e) => {
   if (!aiLvlSettingsBtn.contains(e.target) && !aiLvlOptionsWrapper.classList.contains("none")) {
+    aiLvlOptionsWrapper.classList.add("none");
+  }
+});
+
+body.addEventListener("keydown", (e) => {
+  if ((e.key == "Enter" || e.key == "Escape") && !aiLvlSettingsBtn.contains(e.target) && !aiLvlOptionsWrapper.classList.contains("none")) {
     aiLvlOptionsWrapper.classList.add("none");
   }
 });

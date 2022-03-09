@@ -7,23 +7,28 @@
 .btn {
   background-color: #0a7753;
   padding: 0.5rem 2rem;
-  margin:0 .5rem;
+  margin: 0 0.5rem;
   border-radius: 1rem;
   box-shadow: -2px 3px 2px #999;
   cursor: pointer;
   transition: transform 0.2s linear, border-radius 0.2s linear;
   user-select: none;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     transform: scale(1.05);
     border-radius: 1.5rem 1rem;
   }
+
+  &:focus-visible {
+    outline: 2px solid #ccc;
+  }
 }
 
-.none{
+.none {
   display: none !important;
 }
 
-.hide{
+.hide {
   visibility: hidden;
 }

@@ -15,10 +15,15 @@
     border-radius: 0.3rem;
     box-shadow: inset 3px 5px 10px #0a775350;
     cursor: pointer;
+
+    &:focus-visible {
+      outline: 3px solid #cccccc80;
+    }
   }
 
   .available-board-item {
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: #cccccc50;
     }
   }
@@ -97,13 +102,20 @@
   }
 
   .level-settings-btn {
-    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
     transform: rotate(0deg);
     transition: transform 0.3s linear;
+    border-radius: 20%;
+    padding: 0.3rem;
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &:focus {
       transform: rotate(180deg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #cccccc80;
     }
   }
 
@@ -122,10 +134,16 @@
     &:not(:last-child) {
       border-bottom: 1px solid #cccccc50;
     }
-  }
 
-  .level-option:hover {
-    background-color: #cccccc10;
+    &:hover,
+    &:focus {
+      background-color: #cccccc10;
+    }
+
+    &:focus-visible {
+      border-radius: 0.5rem;
+      outline: 2px solid #cccccc80;
+    }
   }
 
   .current-level {
@@ -204,7 +222,7 @@
 
 @keyframes blink-item {
   to {
-    box-shadow: inset 3px 4px 10px #ffffff50, inset -3px -4px 10px #ffffff50;
+    background-color: #cccccc35;
   }
 }
 
