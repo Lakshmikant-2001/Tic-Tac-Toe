@@ -44,6 +44,20 @@ main {
   }
 }
 
+.repo-link {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  margin:clamp(1rem, 2vw, 2rem);
+  color: #0a7753;
+  font-size: clamp(2rem, 2vw, 2.5rem);
+  transition: transform .3s linear;
+
+  &:hover{
+    transform: scale(1.2);
+  }
+}
+
 @media (max-width: 850px) {
   main {
     #game-title,
