@@ -32,3 +32,12 @@
 .hide {
   visibility: hidden;
 }
+
+.box {
+  border-radius: 0.5rem;
+  color: #aaa;
+  border: none;
+  border-left: 3px solid #cccccc50;
+  border-right: 3px solid#cccccc50;
+  box-shadow: 0px 3px 10px #cccccc10, 0px -2px 10px #cccccc10;
+}
