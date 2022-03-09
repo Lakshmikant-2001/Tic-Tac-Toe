@@ -5,21 +5,22 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   font-family: $primary-font;
-  font-size: 1.6rem;
+  font-size: var(--default-font-size);
   color: #ccc;
   @include flex();
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 main {
-  width: 60vw;
-  height: 80vh;
+  width: Min(90%, 1150px);
+  min-height: 80vh;
   background: #00101c;
   opacity: 0.95;
   border-radius: 2rem;
   box-shadow: 2px 3px 5px #cccccc20;
   @include flex(column, space-between);
   position: relative;
+  user-select: none;
 
   #game-title,
   #btn-wrapper {
@@ -34,10 +35,62 @@ main {
 
   #game-type-wrapper {
     @include flex();
-    padding: 0 8rem;
+    flex-wrap: wrap;
   }
 
   #game-display-wrapper {
-    @include flex($justify:space-evenly);
+    @include flex($justify: space-evenly);
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 850px) {
+  main {
+    #game-title,
+    #btn-wrapper {
+      margin: 3rem 0;
+    }
+
+    #btn-wrapper {
+      margin-top: 1rem;
+    }
+
+    .message {
+      margin: 1.5rem 1rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    min-height: unset;
+
+    .message {
+      margin: 1rem;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  main {
+    width: 100%;
+    margin: 0 0.3rem;
+
+    #game-display-wrapper {
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.5rem 1.75rem;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  main {
+    .btn {
+      padding: 0.4rem 1.5rem;
+    }
   }
 }
