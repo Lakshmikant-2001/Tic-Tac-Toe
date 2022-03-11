@@ -89,9 +89,27 @@ function startGame() {
     clearAiLvl();
     addAnimation(gameBoard, "scale-in-animation");
   });
+
+  //return to main menu
+  returnBtn.addEventListener("click", () => {
+    Object.keys(gameInstance).forEach(key => {
+      gameInstance[key] = undefined;
+    });
+    gameBoard.classList.remove("scale-out-animation");
+    aiLvlSettingsBtn.classList.add("none");
+    gameType = "";
+    unblockPointerEvents();
+    displayGameType();
+    clearSelection();
+    clearBoardUI();
+    clearScoreUI();
+    clearAiLvl();
+  });
 }
 
 function playGame(e, gameInstance) {
+  if (gameInstance.getCurrentPlayer == undefined)
+    return;
   let item = e.currentTarget;
   item.blur();
   let targetIndex = item.dataset.index;
@@ -112,10 +130,12 @@ function playGame(e, gameInstance) {
     const item = findItem(targetIndex);
     blockPointerEvents();
     setTimeout(() => {
-      updateBoardUI(item, currentPlayer);
-      addTurnIndicatorUI(nextPlayer);
-      unblockPointerEvents();
-      gameInstance.isEnd() ? endGame(gameInstance) : "";
+      if (gameInstance.reset != undefined) {
+        updateBoardUI(item, currentPlayer);
+        addTurnIndicatorUI(nextPlayer);
+        unblockPointerEvents();
+        gameInstance.isEnd() ? endGame(gameInstance) : "";
+      }
     }, 500);
   }
 }
@@ -129,7 +149,7 @@ function endGame(gameInstance) {
   updateScore(gameInstance.getScore());
   addAnimation(gameBoard, "scale-out-animation");
   gameBoard.addEventListener("animationend", (e) => {
-    if (e.animationName == "scale-out") {
+    if (e.animationName == "scale-out" && gameInstance.reset != undefined) {
       gameInstance.reset();
       clearBoardUI();
       addAnimation(gameBoard, "scale-in-animation");
@@ -148,6 +168,11 @@ function displayGameLayout() {
   updateClassList([gameDisplayWrapper, restartBtn, returnBtn], "none", "remove");
 }
 
+function displayGameType() {
+  updateClassList([gameTypeWrapper, startGameBtn], "none", "remove");
+  updateClassList([gameDisplayWrapper, restartBtn, returnBtn], "none", "add");
+}
+
 function specifyPlayers(type) {
   let player1, player2;
   if (type == "computer") {
@@ -158,8 +183,8 @@ function specifyPlayers(type) {
     player1 = playerFactory(1, "human-1", true, "X", 0);
     player2 = playerFactory(2, "human-2", false, "O", 0);
   }
-  player1NameTag.textContent += player1.name;
-  player2NameTag.textContent += player2.name;
+  player1NameTag.textContent = player1.name;
+  player2NameTag.textContent = player2.name;
   return [player1, player2];
 }
 
@@ -180,6 +205,8 @@ function addAiLevelsOption(gameInstance) {
 }
 
 function dispAiLevels(gameInstance) {
+  if (gameInstance.isVsComputer == undefined)
+    return;
   aiLvlOptionsWrapper.classList.remove("none");
   aiLvlOptions.forEach(option => {
     option.addEventListener("click", () => {
@@ -196,6 +223,8 @@ function dispAiLevels(gameInstance) {
 }
 
 function changeAiLevel(option, gameInstance) {
+  if (gameInstance.isVsComputer == undefined)
+    return;
   let aiLevel = option.getAttribute("value");
   gameInstance.setAiLevel(aiLevel);
   option.classList.add("current-level");
@@ -215,11 +244,6 @@ body.addEventListener("keydown", (e) => {
   if ((e.key == "Enter" || e.key == "Escape") && !aiLvlSettingsBtn.contains(e.target) && !aiLvlOptionsWrapper.classList.contains("none")) {
     aiLvlOptionsWrapper.classList.add("none");
   }
-});
-
-//return to main menu
-returnBtn.addEventListener("click", () => {
-  window.location.reload();
 });
 
 console.log("%cTIC TAC TOE", "font-size:1.5rem;color:#fad;font-weight:bold");

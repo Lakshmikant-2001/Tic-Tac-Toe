@@ -63,6 +63,7 @@ main {
   transition: transform 0.3s linear;
   border-radius: 20%;
   width: clamp(30px, 3vw, 35px);
+  -webkit-user-drag: none;
   cursor: pointer;
 
   &:hover,

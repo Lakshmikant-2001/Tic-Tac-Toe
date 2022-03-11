@@ -167,7 +167,7 @@ export const gameFactory = function (player1, player2) {
       if (result[0]) {
         setWinner(player1);
         setWinIndex(result[1]);
-        setScore(player2);
+        setScore(player1);
       }
     }
     if (getCurrentPlayer() == player2 && canMark(targetIndex)) {
